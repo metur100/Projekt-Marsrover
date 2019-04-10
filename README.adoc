@@ -1,0 +1,79 @@
+# Professionelle Softwareentwicklung: Projekt 1
+
+## Projekt
+IMPORTANT: Die Abgabefrist ist der 19.04.2019 um 20:00 Uhr (Ortszeit Düsseldorf)
+
+### Aufgabe 1
+
+Schauen Sie sich die folgenden Videos im Hinblick auf die unten stehenden Leitfragen an:
+
+* https://youtu.be/F44o1FEk-jU[Benennung von Dingen (SS17)]
+* https://youtu.be/YsZsmnDO6s0[Gute Funktionen und Methoden schreiben (SS17)]
+* https://youtu.be/3FNdbV21FaY[Code kommentieren (SS17)]
+* https://youtu.be/DtNGxeQxA28[Code formatieren (SS17)]
+* https://goo.gl/J5rjaZ[Philip Starritt: Avoid Boolean Parameters]
+* https://goo.gl/6sRhEq[Philip Starritt: Comparing String Constants] Ein netter kleiner Trick, wie man eine ganze Reihe von Fehlern eliminieren kann (siehe auch https://goo.gl/uS3VKu[Yoda Condition])
+* https://youtu.be/U9KWwFynNL4[Restrukturierung des Codes aus dem Gute Funktionen und Methoden Video (SS17)]
+
+NOTE: Pro-Tipp: Videos von Jens kann man gut mit 1.5 facher Geschwindigkeit anschauen
+
+Leitfragen:
+
+* Wie benennt man Dinge (Methoden, Klassen, ...) im Quelltext, um Lesbarkeit und Verständlichkeit zu verbessern?
+* Wie sollten Methoden/Funktionen beschaffen sein, um möglichst gut verständlich zu sein?
+* Was ist ein guter Kommentar? Was / wann sollte man kommentieren?
+* Was für Regeln sollten für die Formatierung von Sourcecode gelten?
+* Was ist Ihnen wichtig? Was hilft Ihnen beim Verstehen eines Programms?
+
+Sie brauchen keine Antworten auf die Leitfragen aufzuschreiben, aber versuchen Sie für sich eine Antwort zu finden.
+
+### Aufgabe 2
+Sie bekommen ein Programm, das einen Roboter über den Mars steuert. Das Programm wird mit ```./gradlew run --args="<INSTRUKTIONEN>"``` aufgerufen.
+
+Auf der Oberfläche werden zufällig Hindernisse platziert. Die Instruktionen sind eine Sequenz von Buchstaben, die den Roboter steuern.  Gültige Buchstaben sind:
+
+* l - Dreht den Rover gegen den Uhrzeigersinn (left)
+* r - Dreht den Rover mit dem Uhrzeigersinn (right)
+* f - Bewegt den Rover einen Schritt vorwärts (forward)
+* b - Bewegt den Rover einen Schritt rückwärts (backward)
+
+Ein Beispiel für eine Kontrollsequenz, bei der der Rover zwei Schritte vorwärts macht, sich im Uhrzeiger dreht und dann zwei Schritte rückwärts moonwalkt wäre ```ffrbb```.
+
+Der Aufruf wäre entsprechend: ```./gradlew run --args="ffrbb"```
+
+Das Programm gibt eine Karte des Planeten nach jedem Schritt aus. Hindernisse sind mit ```#``` markiert und der Rover durch einen Pfeil.
+
+**Ihre Aufgaben**
+
+. Reparieren Sie einen Bug, bei dem der Rover plötzlich verschwindet. Sie können den Bug mit ```./gradlew run --args="lff 4711"``` reproduzieren. Die Zahl sorgt dafür, dass die Hindernisse immer an den gleichen Stellen sind.
+. Formen Sie den Code nach den Ideen, die Sie in Aufgabe 1 entwickelt haben um. Jeder Änderungsschritt (d.h. eine Änderung des Quelltextes, die einen Zweck hat) soll ein einzelner Commit sein, nach jedem Commit soll die Anwendung compilier- und startbar sein. Jeder Commit soll eine Commitnachricht haben, aus dem man nachvollziehen kann, welchen Zweck die Änderung hat. Ziehen Sie auch eine Änderung der benutzten Datenstrukturen in Betracht.
+. Passen Sie den Bewegungscode so an, dass der Roboter einzelne Befehle ignoriert, die ihn in ein Hindernis laufen lassen würden.
+
+## Abgabe
+Sie geben das Projekt über GitHub ab, es zählt der letzte Commit vor der Abgabefrist.
+Zusätzlich zu der Abgabe über GitHub müssen wir noch einige Daten in AUAS von Ihnen bekommen, um die Korrektoren zuzuordnen. Geben Sie im Textfeld zum Projekt also die Daten in folgendem Format ab:
+
+```
+name: Ihr GitHub Username
+url: Die URL Ihres Repositories in dem Projekt 1 ist
+```
+
+Beispiel:
+```
+name: propratester
+url: https://github.com/hhu-propra1-ss-19/projekt-1-marsrover-propratester
+```
+
+## Zusatzmaterial
+Das Zusatzmaterial ist nicht klausurrelevant, wenn die Inhalte nicht zusätzlich noch an anderer Stelle behandelt werden. Trotzdem ist es potentiell hilfreich für die Aufgabenstellung.
+
+* https://goo.gl/GNN9Ni[Victor Rentea: The Art of clean code].
+Das Video ist insgesamt sehr gut, einige Teile sind aber fortgeschrittener Stoff.
+
+Die folgenden Bücher sind über die ULB elektronisch verfügbar.
+
+* https://goo.gl/W3GeF6[Effective Java]
+* https://goo.gl/pfQviN[Clean Code - Refactoring, Patterns, Testen und Techniken für sauberen Code]
+
+Sie können die Bücher nur aus dem Universitätsnetzwerk abrufen. Um aus anderen Netzwerken zugreifen zu können, müssen Sie sich per VPN in das Universitätsnetzwerk verbinden. Eine Anleitung finden Sie auf folgender Seite des ZIMs:
+http://www.zim.hhu.de/services-des-zim/netz/netzzugang/vpn-von-zu-hause-ins-uni-netz.html
