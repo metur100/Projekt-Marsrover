@@ -9,75 +9,75 @@ import java.util.Set;
 public class Start {
 
 	static Random r = new Random();
-	static LinkedHashMap<int[], String> mars;
+	static LinkedHashMap<int[], String> marsMap;
 
-	public static void init() {
-		mars = new LinkedHashMap<>();
-		int x = 80;
-		int y = 20;
-		int rx = x / 2;
-		int ry = y / 2;
-		for (int i = 0; i < x; i++) {
-			for (int j = 0; j < y; j++) {
-				int[] p = new int[] { i, j };
-				if (r.nextDouble() < 0.25 && !(rx == i && ry == j))
-					mars.put(p, "#");
+	public static void createMapAndRover () {
+		marsMap = new LinkedHashMap<>();
+		int FIELD_WIDTH = 80;
+		int FIELD_HEIGHT = 20;
+		int ROVER_POSITIONX = FIELD_WIDTH / 2;
+		int ROVER_POSITIONY = FIELD_HEIGHT / 2;
+		for (int i = 0; i < FIELD_WIDTH; i++) {
+			for (int j = 0; j < FIELD_HEIGHT; j++) {
+				int[] emptyField = new int[] { i, j };
+				if (r.nextDouble() < 0.25 && !(ROVER_POSITIONX == i && ROVER_POSITIONY == j))
+					marsMap.put(emptyField, "#");
 			}
 		}
-		mars.put(new int[] { rx, ry }, "n");
+		marsMap.put(new int[] { ROVER_POSITIONX, ROVER_POSITIONY }, "n");
 	}
 
-	public static int[] maximum(Set<int[]> set) {
-		int[] x = new int[2];
-		for (int[] e : set) {
-			if (e[0] > x[0])
-				x[0] = e[0];
-			if (e[1] > x[1])
-				x[1] = e[1];
+	public static int[] determineMaximumWidthAndHeight (Set<int[]> mapCoordinates) {
+		int[] boundaryCoordinates = new int[2];
+		for (int[] e : mapCoordinates) {
+			if (e[0] > boundaryCoordinates[0])
+				boundaryCoordinates[0] = e[0];
+			if (e[1] > boundaryCoordinates[1])
+				boundaryCoordinates[1] = e[1];
 		}
-		return x;
+		return boundaryCoordinates;
 	}
 
-	public static String get(Map<int[], String> kloetze, int[] p) {
-		Set<Entry<int[], String>> entrySet = kloetze.entrySet();
+	public static String getRoverAndObstacles(Map<int[], String> marsObject, int[] currentPosition) {
+		Set<Entry<int[], String>> entrySet = marsObject.entrySet();
 		for (Entry<int[], String> entry : entrySet) {
-			if (entry.getKey()[0] == p[0] && entry.getKey()[1] == p[1])
+			if (entry.getKey()[0] == currentPosition[0] && entry.getKey()[1] == currentPosition[1])
 				return entry.getValue();
 		}
 		return null;
 	}
 
-	public static void out() {
-		// Set<int[]> keySet = mars.keySet();
+	public static void printoutTheField() {
+		// Set<int[]> keySet = marsMap.keySet();
 		// for (int[] e : keySet) {
 		// if (e[0] == 39 && e[1] == 10)
-		// System.err.println(mars.get(e) + " " + e.hashCode());
+		// System.err.println(marsMap.get(e) + " " + e.hashCode());
 		// }
 
-		int[] max = maximum(mars.keySet());
-		for (int j = 0; j < max[1]; j++) {
-			for (int i = 0; i < max[0]; i++) {
-				// System.out.println(i + "," + j + ": " + get(mars, new int[] { i, j }));
+		int[] WidthAndHeight = determineMaximumWidthAndHeight(marsMap.keySet());
+		for (int j = 0; j < WidthAndHeight[1]; j++) {
+			for (int i = 0; i < WidthAndHeight[0]; i++) {
+				//System.out.println(i + "," + j + ": " + getRoverAndObstacles(marsMap, new int[] { i, j }));
 
-				if (get(mars, new int[] { i, j }) == null) {
+				if (getRoverAndObstacles(marsMap, new int[] { i, j }) == null) {
 					System.out.print(" ");
 					continue;
 				}
-				if (get(mars, new int[] { i, j }).equals("#"))
+				if (getRoverAndObstacles(marsMap, new int[] { i, j }).equals("#"))
 					System.out.print("#");
-				else if (get(mars, new int[] { i, j }).equals("n"))
+				else if (getRoverAndObstacles(marsMap, new int[] { i, j }).equals("n"))
 					System.out.print("^");
-				else if (get(mars, new int[] { i, j }).equals("s"))
+				else if (getRoverAndObstacles(marsMap, new int[] { i, j }).equals("s"))
 					System.out.print("V");
-				else if (get(mars, new int[] { i, j }).equals("e"))
+				else if (getRoverAndObstacles(marsMap, new int[] { i, j }).equals("e"))
 					System.out.print(">");
-				if (get(mars, new int[] { i, j }).equals("w"))
+				if (getRoverAndObstacles(marsMap, new int[] { i, j }).equals("w"))
 					System.out.print("<");
 
 			}
 			System.out.println();
 		}
-		for (int i = 0; i < max[0]; i++) {
+		for (int i = 0; i < WidthAndHeight[0]; i++) {
 			System.out.print("=");
 		}
 		System.out.println();
@@ -90,67 +90,66 @@ public class Start {
 			r.setSeed(seed);
 			// System.out.println("Seed: " + seed);
 		}
-		init();
-		String pg = args[0];
-		out();
-		for (int i = 0; i < pg.length(); i++) {
-			make(pg.charAt(i));
-			out();
+		createMapAndRover();	
+		String directionsOfRover = args[0];
+		printoutTheField();
+		for (int i = 0; i < directionsOfRover.length(); i++) {
+			roverMovement(directionsOfRover.charAt(i));
+			printoutTheField();
 		}
 	}
 
-	public static void make(char c) {
+	public static void roverMovement(char c) {
 		if (c == 'f') {
-			int[] p = findeRover();
-			if (get(mars, p).equals("n"))
-				p[1]--;
-			else if (get(mars, p).equals("s"))
-				p[1]++;
-			else if (get(mars, p).equals("e"))
-				p[0]++;
-			else if (get(mars, p).equals("w"))
-				p[0]--;
+			int[] currentPosition = findRover();
+			if (getRoverAndObstacles(marsMap, currentPosition).equals("n"))
+				currentPosition[1]--;
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("s"))
+				currentPosition[1]++;
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("e"))
+				currentPosition[0]++;
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("w"))
+				currentPosition[0]--;
 		} else if (c == 'b') {
-			int[] p = findeRover();
-			if (get(mars, p).equals("s"))
-				p[1]--;
-			else if (get(mars, p).equals("n"))
-				p[1]++;
-			else if (get(mars, p).equals("w"))
-				p[0]++;
-			else if (get(mars, p).equals("e"))
-				p[0]--;
+			int[] currentPosition = findRover();
+			if (getRoverAndObstacles(marsMap, currentPosition).equals("s"))
+				currentPosition[1]--;
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("n"))
+				currentPosition[1]++;
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("w"))
+				currentPosition[0]++;
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("e"))
+				currentPosition[0]--;
 		} else if (c == 'l') {
-			int[] p = findeRover();
-			if (get(mars, p).equals("n"))
-				mars.put(p, "w");
-			else if (get(mars, p).equals("s"))
-				mars.put(p, "e");
-			else if (get(mars, p).equals("e"))
-				mars.put(p, "n");
-			else if (get(mars, p).equals("w"))
-				mars.put(p, "s");
+			int[] currentPosition = findRover();
+			if (getRoverAndObstacles(marsMap, currentPosition).equals("n"))
+				marsMap.put(currentPosition, "w");
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("s"))
+				marsMap.put(currentPosition, "e");
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("e"))
+				marsMap.put(currentPosition, "n");
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("w"))
+				marsMap.put(currentPosition, "s");
 		} else if (c == 'r') {
-			int[] p = findeRover();
-			if (get(mars, p).equals("w"))
-				mars.put(p, "n");
-			else if (get(mars, p).equals("e"))
-				mars.put(p, "s");
-			else if (get(mars, p).equals("n"))
-				mars.put(p, "e");
-			else if (get(mars, p).equals("s"))
-				mars.put(p, "w");
+			int[] currentPosition = findRover();
+			if (getRoverAndObstacles(marsMap, currentPosition).equals("w"))
+				marsMap.put(currentPosition, "n");
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("e"))
+				marsMap.put(currentPosition, "s");
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("n"))
+				marsMap.put(currentPosition, "e");
+			else if (getRoverAndObstacles(marsMap, currentPosition).equals("s"))
+				marsMap.put(currentPosition, "w");
 		}
-
 	}
 
-	private static int[] findeRover() {
-		Set<Entry<int[], String>> entrySet = mars.entrySet();
+	private static int[] findRover() {
+		Set<Entry<int[], String>> entrySet = marsMap.entrySet();
 		for (Entry<int[], String> entry : entrySet) {
 			if (entry.getValue() != null && !entry.getValue().equals("#"))
 				return entry.getKey();
 		}
 		throw new IllegalStateException("Rover missing in action");
-	}
 
+	}
 }
