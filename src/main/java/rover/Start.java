@@ -21,10 +21,10 @@ public class Start {
 			for (int j = 0; j < FIELD_HEIGHT; j++) {
 				int[] emptyField = new int[] { i, j };
 				if (r.nextDouble() < 0.25 && !(ROVER_POSITIONX == i && ROVER_POSITIONY == j))
-					marsMap.put(emptyField, "#");
+					marsMap.put(emptyField, "#"); //Die Karte mit den Hindernissen wurde hier erzeugt
 			}
 		}
-		marsMap.put(new int[] { ROVER_POSITIONX, ROVER_POSITIONY }, "n");
+		marsMap.put(new int[] { ROVER_POSITIONX, ROVER_POSITIONY }, "n"); //Der Rover wird in der Mitte erzeugt und zeigt auf Nord (n)
 	}
 
 	public static int[] determineMaximumWidthAndHeight (Set<int[]> mapCoordinates) {
@@ -53,6 +53,8 @@ public class Start {
 		// if (e[0] == 39 && e[1] == 10)
 		// System.err.println(marsMap.get(e) + " " + e.hashCode());
 		// }
+		
+		if(CheckIfThereIsAnObstacle('f')) return; //Wenn der Rover auf Hinderniss laeuft, dann springen wir zueruck.
 
 		int[] WidthAndHeight = determineMaximumWidthAndHeight(marsMap.keySet());
 		for (int j = 0; j < WidthAndHeight[1]; j++) {
@@ -80,11 +82,11 @@ public class Start {
 		for (int i = 0; i < WidthAndHeight[0]; i++) {
 			System.out.print("=");
 		}
+		
 		System.out.println();
 	}
 
 	public static void main(String[] args) {
-
 		if (args.length > 1) {
 			long seed = Long.parseLong(args[1]);
 			r.setSeed(seed);
@@ -93,11 +95,12 @@ public class Start {
 		createMapAndRover();	
 		String directionsOfRover = args[0];
 		printoutTheField();
-		for (int i = 0; i < directionsOfRover.length(); i++) {
+		for (int i = 0; i < directionsOfRover.length(); i++) { // Für jede Bewegung neuen Feld ausprinten
 			roverMovement(directionsOfRover.charAt(i));
 			printoutTheField();
 		}
 	}
+	
 
 	public static void roverMovement(char c) {
 		if (c == 'f') {
@@ -141,6 +144,14 @@ public class Start {
 			else if (getRoverAndObstacles(marsMap, currentPosition).equals("s"))
 				marsMap.put(currentPosition, "w");
 		}
+	}
+	
+	public static boolean CheckIfThereIsAnObstacle(char c){	//Wenn der Rover auf Hinderniss laeuft, dann printen wir das Feld nicht mehr aus
+        int[] currentPosition = findRover();				//Somit verschwindet er nicht mehr
+        if (!getRoverAndObstacles(marsMap, currentPosition).equals("#")){
+        	return false;
+        }
+        return true;
 	}
 
 	private static int[] findRover() {
