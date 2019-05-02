@@ -5,16 +5,16 @@ public class Test {
 		
 		if (args.length > 1) {
 			long seed = Long.parseLong(args[1]);
-			Rover.RANDOM_NUMBER.setSeed(seed);
+			Rover.ZUFALL_ZAHL.setSeed(seed);
 			// System.out.println("Seed: " + seed);
 		}		
-		Rover.createMapAndRover();
+		Rover.erstelleKarteUndSetzeRover();
 		String directionsOfRover = args[0];
-		Mars.printoutTheField();
+		Rover.printKarte();
 		
 		for(int i=0; i < directionsOfRover.length(); i++) {
-			Rover.roverMovement(directionsOfRover.charAt(i));
-			Mars.printoutTheField();
+			//Rover.roverMovement(directionsOfRover.charAt(i));
+			Rover.printKarte();
 		}
 	}
 }
